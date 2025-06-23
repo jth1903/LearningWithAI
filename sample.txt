@@ -1,0 +1,4 @@
+Hello, this is a sample file!
+This is the second line.
+And this is the third line.
+File append successfully!
