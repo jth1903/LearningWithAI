@@ -6,12 +6,12 @@ class AdventureGame:
         self.player_name = ""
         self.equipped_weapon = None
         self.current_room = "entrance"
-        self.inventory = []
+        self.inventory = {}
         self.game_over = False
         
         self.items = {
-            # Item List: gemstone, torch, mysterious_artifact, staff_of_light, staff_of_the_luminary,
-            # enchanted_coin, luminary, luminary_key, luminary_glow, staff_of_the_luminary
+            # Item List: gemstone, torch, mysterious_artifact, staff_of_light, staff_of_the_light_mage,
+            # enchanted_coin, luminary, luminary_key, luminary_glow
 
             "legendary_sword": {
                 "name": "Legendary Sword",
@@ -44,7 +44,76 @@ class AdventureGame:
                 "reflective_quality": 50,
                 "combinable": True
             },
-
+            "torch": {
+                "name": "torch",
+                "description": "A wooden torch with a metal handle",
+                "type": "item",
+                "rarity": "common",
+                "combinable": True,
+                "light_radius": 3,
+            },
+            "mysterious_artifact": {
+                "name": "mysterious artifact",
+                "description": "A strange artifact with a glowing core",
+                "type": "item",
+                "rarity": "rare",
+                "combinable": True
+            },
+            "staff_of_light": {
+                "name": "staff of light",
+                "description": "A staff with a glowing core",
+                "light_radius": 5,
+                "damage": 15,
+                "durability": 100,
+                "type": "weapon",
+                "rarity": "legendary",
+                "combinable": True
+            },
+            "enchanted_coin": {
+                "name": "enchanted coin",
+                "description": "A coin that seems to have been imbued with magical energy",
+                "type": "item",
+                "rarity": "rare",
+                "combinable": True
+            },
+            "luminary": {
+                "name": "luminary",
+                "description": "A glowing abnormality that seems to emit a soft, warm light, it seems to be a glowing orb that shifts between solid and trasparent",
+                "type": "item",
+                "rarity": "rare",
+                "combinable": True,
+                "light_radius": 5,
+                "damage": 15,
+                "durability": 100,
+                "type": "weapon",
+                "rarity": "legendary",
+                "combinable": True
+            },
+            "luminary_key": {
+                "name": "luminary key",
+                "description": "A key that seems to be made of a strange metal, it has a strange symbol on it",
+                "type": "item",
+                "rarity": "rare",
+                "combinable": True
+            },
+            "luminary_glow": {
+                "name": "luminary glow",
+                "description": "A glowing orb that seems to emit a soft, warm light, it seems to be a glowing orb that shifts between solid and trasparent",
+                "type": "item",
+                "rarity": "rare",
+                "combinable": True
+            },
+            "staff_of_the_light_mage": {
+                "name": "staff of the light mage",
+                "description": "A staff with a glowing core. It seems to radiate light and energy",
+                "light_radius": 5,
+                "damage": 15,
+                "durability": 100,
+                "reflective_quality": 100,
+                "type": "weapon",
+                "rarity": "legendary",
+                "combinable": False
+            }
         }
 
         # Define the game world
@@ -130,7 +199,7 @@ class AdventureGame:
             ("enchanted_coin", "mysterious_artifact"): "luminary",
             ("luminary", "ancient_key"): "luminary_key",
             ("luminary_key", "torch"): "luminary_glow",
-            ("luminary_glow", "staff_of_light"): "staff_of_the_luminary"
+            ("luminary_glow", "staff_of_light"): "staff_of_the_light_mage"
         }
 
         # Check both orders (item1+item2 and item2+item1)
@@ -168,9 +237,9 @@ class AdventureGame:
                 if item1 in self.inventory and item2 in self.inventory:
                     new_item = self.combine_items(item1, item2)
                     if new_item:
-                        self.inventory.remove(item1)
-                        self.inventory.remove(item2)
-                        self.inventory.append(new_item)
+                        del self.inventory[item1]
+                        del self.inventory[item2]
+                        self.inventory[new_item] = True
                         self.print_slow(f"You successfully combine {item1} and {item2} to create {new_item}")
                     else:
                         self.print_slow(f"you can combine {item1} and {item2}.")
@@ -186,7 +255,7 @@ class AdventureGame:
             item = command[5:]
             if item in room["items"]:
                 room["items"].remove(item)
-                self.inventory.append(item)
+                self.inventory[item] = True
                 if item in self.items:
                     item_info = self.items[item]
                     self.print_slow(f"You picked up the {item_info['name']}!")
@@ -209,9 +278,9 @@ class AdventureGame:
                     self.print_slow("The hidden room lights up from the torch and you see a giant orc blocking the north exit")
                 elif item == "ancient_key" and self.current_room == "treasure_room":
                     self.print_slow("The key fits perfectly in the chest! You found a legendary sword!")
-                    self.inventory.append("legendary_sword")
-                elif item == "staff_of_the_luminary" and self.current_room == "treasure_room":
-                    self.print_slow("You raise the Staff of the Luminary. A beam of light shoots from its tip, illuminating a hidden panel in the wall.")
+                    self.inventory[self.items["legendary_sword"]] = True
+                elif item == "staff_of_the_light_mage" and self.current_room == "treasure_room":
+                    self.print_slow("You raise the Staff of the Light Mage. A beam of light shoots from its tip, illuminating a hidden panel in the wall.")
                     self.print_slow("With a rumble, the panel slides open, revealing a hidden passage leading deeper into the unknown...")
                     # Optionally, you could unlock a new room or set a flag here
                     self.rooms["treasure_room"]["exits"]["secret"] = "hidden_passage"
