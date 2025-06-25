@@ -4,7 +4,13 @@ import random
 class AdventureGame:
     def __init__(self):
         self.player_name = ""
-        self.equipped_weapon = None
+        self.equipped_weapon = {
+            "name": "none",
+            "damage": 0,
+            "durability": 0,
+            "type": "weapon",
+            "rarity": "none",
+        }
         self.current_room = "entrance"
         self.inventory = {}
         self.game_over = False
@@ -136,7 +142,12 @@ class AdventureGame:
             "hidden_passage": {
                 "description": "As you enter the doorway, you hear a faint growl.",
                 "exits": {},
-                "enemys": {"first": "orc"},
+                "enemys": { "orc":{
+                    "name": "orc",
+                    "health": 100,
+                    "damage": 10,
+                    "description": "A large orc with a large axe"
+                }},
                 "items": ["torch"]
             },
             "dark_tunnel": {
@@ -148,6 +159,11 @@ class AdventureGame:
                 "description": "A large opening in the cave there are random things strowed all over. You see a glowing staff on the ground with the words 'staff_of_light' engraved on the hilt",
                 "exits": {"east": "dark_tunnel"},
                 "items": ["staff_of_light"]
+            },
+            "field": {
+                "description": "You are in a field.",
+                "exits": {"south": "hidden_passage", "north": ""},
+                "items": []
             }
         }
     
@@ -211,10 +227,20 @@ class AdventureGame:
             return None
 
     def attack_enemy(self, enemy):
+        self.equipped_weapon = self.items["legendary_sword"]
         if self.equipped_weapon:
-            damage = self.equipped_weapon.damage
+            damage = self.equipped_weapon["damage"]
             self.print_slow("you attack the {enemy} with your {self.equipped_weapon.name}")
             self.print_slow(f"You deal {damage} damage!")
+            enemy["health"] -= damage
+            self.print_slow(f"The {enemy['name']} has {enemy['health']} health remaining.")
+            if enemy["name"] == "orc" and enemy["health"] <= 0:
+                self.print_slow("You have defeated the orc!")
+                self.rooms[self.current_room]["enemys"].pop("orc")
+                self.rooms[self.current_room]["exits"]["north"] = "field"
+                return True
+
+            return False
 
     def process_command(self, command):
         """Process player commands"""
@@ -267,7 +293,12 @@ class AdventureGame:
             return True
 
         elif command.startswith("attack "):
-            self.attack_enemy(self.current_room["enemys": "first"])
+            enemy_name = command[7:]  # Extract enemy name from "attack [enemy]"
+            if "enemys" in self.rooms[self.current_room] and enemy_name in self.rooms[self.current_room]["enemys"]:
+                self.attack_enemy(self.rooms[self.current_room]["enemys"][enemy_name])
+            else:
+                self.print_slow(f"There's no {enemy_name} here to attack.")
+            return True
         
         # Use item command
         elif command.startswith("use "):
@@ -281,7 +312,7 @@ class AdventureGame:
                     self.print_slow("The hidden room lights up from the torch and you see a giant orc blocking the north exit")
                 elif item == "ancient_key" and self.current_room == "treasure_room":
                     self.print_slow("The key fits perfectly in the chest! You found a legendary sword!")
-                    self.inventory[self.items["legendary_sword"]] = True
+                    self.inventory["legendary_sword"] = True
                 elif item == "staff_of_the_light_mage" and self.current_room == "treasure_room":
                     self.print_slow("You raise the Staff of the Light Mage. A beam of light shoots from its tip, illuminating a hidden panel in the wall.")
                     self.print_slow("With a rumble, the panel slides open, revealing a hidden passage leading deeper into the unknown...")
