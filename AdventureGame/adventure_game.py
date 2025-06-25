@@ -4,6 +4,8 @@ import random
 class AdventureGame:
     def __init__(self):
         self.player_name = ""
+        self.player_coin = 0
+        self.player_health = 100  # Add player health
         self.equipped_weapon = {
             "name": "none",
             "damage": 0,
@@ -16,9 +18,6 @@ class AdventureGame:
         self.game_over = False
         
         self.items = {
-            # Item List: gemstone, torch, mysterious_artifact, staff_of_light, staff_of_the_light_mage,
-            # enchanted_coin, luminary, luminary_key, luminary_glow
-
             "legendary_sword": {
                 "name": "Legendary Sword",
                 "description": "A gleaming sword with ancient runews etched into its blade",
@@ -26,6 +25,7 @@ class AdventureGame:
                 "durability": 100,
                 "type": "weapon",
                 "rarity": "Epic",
+                "value": 100,
                 "combinable": False
             },
             "gold_coin": {
@@ -33,6 +33,7 @@ class AdventureGame:
                 "description": "A small gold coin used for currency and rituals",
                 "type": "item",
                 "rarity": "uncommon",
+                "value": 1,
                 "combinable": True
             },
             "ancient_key": {
@@ -48,6 +49,7 @@ class AdventureGame:
                 "type": "item",
                 "rarity": "rare",
                 "reflective_quality": 50,
+                "value": 25,
                 "combinable": True
             },
             "torch": {
@@ -57,6 +59,7 @@ class AdventureGame:
                 "rarity": "common",
                 "combinable": True,
                 "light_radius": 3,
+                "value": 5
             },
             "mysterious_artifact": {
                 "name": "mysterious artifact",
@@ -118,6 +121,37 @@ class AdventureGame:
                 "reflective_quality": 100,
                 "type": "weapon",
                 "rarity": "legendary",
+                "value": 1000,
+                "combinable": False
+            },
+            "iron_sword": {
+                "name": "iron sword",
+                "description": "A sturdy iron sword with a sharp blade",
+                "damage": 15,
+                "durability": 80,
+                "type": "weapon",
+                "rarity": "common",
+                "value": 50,
+                "combinable": False
+            },
+            "steel_axe": {
+                "name": "steel axe",
+                "description": "A heavy steel axe that packs a powerful punch",
+                "damage": 20,
+                "durability": 90,
+                "type": "weapon",
+                "rarity": "uncommon",
+                "value": 75,
+                "combinable": False
+            },
+            "magic_dagger": {
+                "name": "magic dagger",
+                "description": "A mystical dagger that glows with magical energy",
+                "damage": 18,
+                "durability": 70,
+                "type": "weapon",
+                "rarity": "rare",
+                "value": 120,
                 "combinable": False
             }
         }
@@ -162,17 +196,37 @@ class AdventureGame:
             },
             "field": {
                 "description": "You are in a field.",
-                "exits": {"south": "hidden_passage", "north": ""},
+                "exits": {"south": "hidden_passage", "north": "village_entrence"},
                 "items": []
+            },
+            "village_entrence": {
+                "description": "You are standing in front of a large archway that seems to have a trail leading into a village.",
+                "exits": {"south": "field", "north": "village_courtyard"},
+            },
+            "village_courtyard": {
+                "description": "You are standing in a large courtyard with a three-tier fountain in the middle with shops to the east and west.",
+                "exits": {"east": "general_goods", "west": "weapons_shop", "south": "village_entrence"}
+            },
+            "weapons_shop": {
+                "descripton": "You walk into a well furnished shop with several weapons on display. The shopkeeper is excited to meet a new customer.",
+                "exits": {"east": "village_courtyard"},
+                "shop_items": {
+                    "iron_sword": {"price": 50, "quantity": 3},
+                    "steel_axe": {"price": 75, "quantity": 2},
+                    "magic_dagger": {"price": 120, "quantity": 1}
+                }
             }
         }
     
     def print_slow(self, text, delay=0.03):
         """Print text with a typewriter effect"""
-        for char in text:
-            print(char, end='', flush=True)
-            time.sleep(delay)
-        print()
+        is_typing = True
+        if is_typing:
+            for char in text:
+                print(char, end='', flush=True)
+                time.sleep(delay)
+            print()
+            is_typing = False
     
     def get_player_name(self):
         """Get the player's name"""
@@ -188,6 +242,9 @@ class AdventureGame:
         room = self.rooms[self.current_room]
         print("\n" + "="*50)
         self.print_slow(room["description"])
+        
+        # Show player status
+        self.print_slow(f"Health: {self.player_health} | Coins: {self.player_coin}")
         
         # Show available exits
         exits = list(room["exits"].keys())
@@ -230,7 +287,7 @@ class AdventureGame:
         self.equipped_weapon = self.items["legendary_sword"]
         if self.equipped_weapon:
             damage = self.equipped_weapon["damage"]
-            self.print_slow(f"you attack the {enemy} with your {self.equipped_weapon["name"]}")
+            self.print_slow(f"you attack the {enemy['name']} with your {self.equipped_weapon['name']}")
             self.print_slow(f"You deal {damage} damage!")
             enemy["health"] -= damage
             self.print_slow(f"The {enemy['name']} has {enemy['health']} health remaining.")
@@ -239,8 +296,24 @@ class AdventureGame:
                 self.rooms[self.current_room]["enemys"].pop("orc")
                 self.rooms[self.current_room]["exits"]["north"] = "field"
                 return True
-
+            # Orc retaliates if still alive
+            if enemy["name"] == "orc" and enemy["health"] > 0:
+                self.orc_attack(enemy)
             return False
+
+    def orc_attack(self, enemy):
+        # Orc has a 70% chance to hit
+        hit_chance = random.random()
+        if hit_chance < 0.7:
+            damage = enemy.get("damage", 10)
+            self.player_health -= damage
+            self.print_slow(f"The {enemy['name']} attacks you and deals {damage} damage!")
+            self.print_slow(f"You have {self.player_health} health remaining.")
+            if self.player_health <= 0:
+                self.print_slow("You have been defeated by the orc! Game over.")
+                self.game_over = True
+        else:
+            self.print_slow(f"The {enemy['name']} swings at you but misses!")
 
     def process_command(self, command):
         """Process player commands"""
@@ -286,6 +359,12 @@ class AdventureGame:
                     item_info = self.items[item]
                     self.print_slow(f"You picked up the {item_info['name']}!")
                     self.print_slow(f"Description: {item_info['description']}")
+                    self.print_slow(f"Combinable: {item_info['combinable']}")
+                    
+                    # Give coins for gold coins
+                    if item == "gold_coin":
+                        self.player_coin += item_info.get("value", 1)
+                        self.print_slow(f"You gained {item_info.get('value', 1)} coin!")
                 else:
                     self.print_slow(f"You picked up the {item}.")
             else:
@@ -317,7 +396,7 @@ class AdventureGame:
                     self.print_slow("You raise the Staff of the Light Mage. A beam of light shoots from its tip, illuminating a hidden panel in the wall.")
                     self.print_slow("With a rumble, the panel slides open, revealing a hidden passage leading deeper into the unknown...")
                     # Optionally, you could unlock a new room or set a flag here
-                    self.rooms["treasure_room"]["exits"]["secret"] = "hidden_passage"
+                    self.rooms["treasure_room"]["exits"]["ancient_door"] = "hidden_passage"
                 else:
                     self.print_slow("Nothing special happens.")
             else:
@@ -338,6 +417,62 @@ class AdventureGame:
                 self.print_slow("Your inventory is empty.")
             return True
         
+        # Status command
+        elif command == "status":
+            self.print_slow(f"Health: {self.player_health}")
+            self.print_slow(f"Coins: {self.player_coin}")
+            if self.inventory:
+                self.print_slow(f"Inventory: {', '.join(self.inventory)}")
+            else:
+                self.print_slow("Inventory: Empty")
+            return True
+        
+        # Shop command
+        elif command == "shop":
+            if "shop_items" in room:
+                self.print_slow("Welcome to the shop! Here's what we have for sale:")
+                self.print_slow(f"Your coins: {self.player_coin}")
+                for item_id, shop_data in room["shop_items"].items():
+                    if item_id in self.items:
+                        item_info = self.items[item_id]
+                        self.print_slow(f"- {item_info['name']}: {shop_data['price']} coins (Quantity: {shop_data['quantity']})")
+                        self.print_slow(f"  Description: {item_info['description']}")
+                        self.print_slow(f"  Damage: {item_info.get('damage', 0)}")
+                self.print_slow("Use 'buy [item_name]' to purchase an item.")
+            else:
+                self.print_slow("There's no shop here.")
+            return True
+        
+        # Buy command
+        elif command.startswith("buy "):
+            if "shop_items" in room:
+                item_name = command[4:].lower()
+                # Find the item in shop_items
+                item_found = None
+                for item_id, shop_data in room["shop_items"].items():
+                    if self.items[item_id]["name"].lower() == item_name:
+                        item_found = (item_id, shop_data)
+                        break
+                
+                if item_found:
+                    item_id, shop_data = item_found
+                    if shop_data["quantity"] > 0:
+                        if self.player_coin >= shop_data["price"]:
+                            self.player_coin -= shop_data["price"]
+                            shop_data["quantity"] -= 1
+                            self.inventory[item_id] = True
+                            self.print_slow(f"You bought {self.items[item_id]['name']} for {shop_data['price']} coins!")
+                            self.print_slow(f"You have {self.player_coin} coins remaining.")
+                        else:
+                            self.print_slow(f"You don't have enough coins. You need {shop_data['price']} coins but have {self.player_coin}.")
+                    else:
+                        self.print_slow("Sorry, that item is out of stock.")
+                else:
+                    self.print_slow("That item is not available in this shop.")
+            else:
+                self.print_slow("There's no shop here.")
+            return True
+        
         # Help command
         elif command == "help":
             self.print_slow("Available commands:")
@@ -345,8 +480,12 @@ class AdventureGame:
             self.print_slow("- take [item]: Pick up an item")
             self.print_slow("- use [item]: Use an item from your inventory")
             self.print_slow("- combine [item1] with [item2]: Combine two items")
+            self.print_slow("- attack [enemy]: Attack an enemy")
             self.print_slow("- look: Look around the current room")
             self.print_slow("- inventory: Check your inventory")
+            self.print_slow("- status: Check your health, coins, and inventory")
+            self.print_slow("- shop: Check the shop inventory")
+            self.print_slow("- buy [item_name]: Buy an item from the shop")
             self.print_slow("- quit: End the game")
             return True
         
