@@ -230,7 +230,7 @@ class AdventureGame:
         self.equipped_weapon = self.items["legendary_sword"]
         if self.equipped_weapon:
             damage = self.equipped_weapon["damage"]
-            self.print_slow("you attack the {enemy} with your {self.equipped_weapon.name}")
+            self.print_slow(f"you attack the {enemy} with your {self.equipped_weapon["name"]}")
             self.print_slow(f"You deal {damage} damage!")
             enemy["health"] -= damage
             self.print_slow(f"The {enemy['name']} has {enemy['health']} health remaining.")
