@@ -202,10 +202,12 @@ class AdventureGame:
             "village_entrence": {
                 "description": "You are standing in front of a large archway that seems to have a trail leading into a village.",
                 "exits": {"south": "field", "north": "village_courtyard"},
+                "items": []
             },
             "village_courtyard": {
                 "description": "You are standing in a large courtyard with a three-tier fountain in the middle with shops to the east and west.",
-                "exits": {"east": "general_goods", "west": "weapons_shop", "south": "village_entrence"}
+                "exits": {"east": "general_goods", "west": "weapons_shop", "south": "village_entrence"},
+                "items": []
             },
             "weapons_shop": {
                 "descripton": "You walk into a well furnished shop with several weapons on display. The shopkeeper is excited to meet a new customer.",
