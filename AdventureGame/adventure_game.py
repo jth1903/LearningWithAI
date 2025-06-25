@@ -19,7 +19,7 @@ class AdventureGame:
                 "damage": 25,
                 "durability": 100,
                 "type": "weapon",
-                "rarity": "legendary",
+                "rarity": "Epic",
                 "combinable": False
             },
             "gold_coin": {
@@ -136,8 +136,8 @@ class AdventureGame:
             "hidden_passage": {
                 "description": "As you enter the doorway, you hear a faint growl.",
                 "exits": {},
+                "enemys": {"first": "orc"},
                 "items": ["torch"]
-                
             },
             "dark_tunnel": {
                 "description": "A narrow, dark tunnel. You can barely see your hand in front of your face.",
@@ -242,7 +242,7 @@ class AdventureGame:
                         self.inventory[new_item] = True
                         self.print_slow(f"You successfully combine {item1} and {item2} to create {new_item}")
                     else:
-                        self.print_slow(f"you can combine {item1} and {item2}.")
+                        self.print_slow(f"you can't combine {item1} and {item2}.")
                 else:
                     self.print_slow(f"You don't have both items in your inventory.")
             else:
@@ -265,6 +265,9 @@ class AdventureGame:
             else:
                 self.print_slow("You don't see that here.")
             return True
+
+        elif command.startswith("attack "):
+            self.attack_enemy(self.current_room["enemys": "first"])
         
         # Use item command
         elif command.startswith("use "):
