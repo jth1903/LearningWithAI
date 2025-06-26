@@ -16,7 +16,15 @@ class AdventureGame:
         self.current_room = "entrance"
         self.inventory = {}
         self.game_over = False
-        
+
+        # TODO: add stackable coins and items
+        # TODO: add a way to equip items
+        # TODO: add a way to unequip items
+        # TODO: add a way to use items
+        # TODO: add a way to combine items
+        # TODO: add a way to attack enemies
+        # TODO: add a way to defeat enemies
+        # TODO: add a way to win the game
         self.items = {
             "legendary_sword": {
                 "name": "Legendary Sword",
@@ -367,6 +375,10 @@ class AdventureGame:
                     if item == "gold_coin":
                         self.player_coin += item_info.get("value", 1)
                         self.print_slow(f"You gained {item_info.get('value', 1)} coin!")
+                    elif item == "gold_coin" and self.inventory[item] == False:
+                        self.print_slow("You removed the gold coin from your inventory.")
+                        self.player_coin -= 1
+                        self.print_slow(f"You have {self.player_coin} coins.")
                 else:
                     self.print_slow(f"You picked up the {item}.")
             else:
