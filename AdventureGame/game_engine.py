@@ -174,7 +174,7 @@ class GameEngine:
             self.print_slow("With a rumble, the panel slides open, revealing a hidden passage leading deeper into the unknown...")
             treasure_room = self.world.get_room("treasure_room")
             if treasure_room:
-                treasure_room.exits["ancient_door"] = "hidden_passage"
+                treasure_room.exits["ancient_door"] = "ancient_door"
         else:
             self.print_slow("Nothing special happens.")
         
@@ -420,11 +420,6 @@ class GameEngine:
                     self.print_slow(f"  {item.name} (x{item.quantity})")
                 else:
                     self.print_slow(f"  {item.name}")
-        for item_id, item in self.player.inventory.items():
-            if item.quantity > 1:
-                self.print_slow(f"  {item.name} (x{item.quantity})")
-            else:
-                self.print_slow(f"  {item.name}")
         return True
     
     def process_examine(self, item_name: str) -> bool:
@@ -521,8 +516,11 @@ class GameEngine:
     
     def process_command(self, command: str) -> bool:
         """Process player commands"""
-        # Movement commands
-        if command in ["north", "south", "east", "west"]:
+        # Movement commands - check if it's a valid exit first
+        room = self.world.get_room(self.current_room_id)
+        if room and command in room.exits:
+            return self.process_movement(command)
+        elif command in ["north", "south", "east", "west"]:
             return self.process_movement(command)
         
         # Take item command
@@ -538,13 +536,21 @@ class GameEngine:
         # Combine items command
         elif command.startswith("combine "):
             parts = command.split()
-            if len(parts) >= 4 and parts[2] == "with":
-                item1_name = parts[1]
-                item2_name = " ".join(parts[3:])
-                return self.process_combine(item1_name, item2_name)
-            else:
-                self.print_slow("Usage: combine [item1] with [item2]")
-                return True
+            if len(parts) >= 4:
+                # Find the "with" keyword
+                with_index = -1
+                for i, part in enumerate(parts):
+                    if part == "with":
+                        with_index = i
+                        break
+                
+                if with_index > 1 and with_index < len(parts) - 1:
+                    item1_name = " ".join(parts[1:with_index])
+                    item2_name = " ".join(parts[with_index + 1:])
+                    return self.process_combine(item1_name, item2_name)
+            
+            self.print_slow("Usage: combine [item1] with [item2]")
+            return True
         
         # Attack command
         elif command.startswith("attack "):

@@ -195,7 +195,7 @@ class GameWorld:
                 "exits": {"west": "entrance"},
                 "items": ["ancient_key", "gemstone"]
             },
-            "hidden_passage": {
+            "ancient_door": {
                 "description": "As you enter the doorway, you hear a faint growl.",
                 "exits": {},
                 "enemies": {"orc": Enemy("orc", 100, 10, "A large orc with a large axe")},
@@ -213,7 +213,7 @@ class GameWorld:
             },
             "field": {
                 "description": "You are in a field.",
-                "exits": {"south": "hidden_passage", "north": "village_entrance"},
+                "exits": {"south": "ancient_door", "north": "village_entrance"},
                 "items": []
             },
             "village_entrance": {
