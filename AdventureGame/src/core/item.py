@@ -31,8 +31,8 @@ class Item:
             'quantity': self.quantity,
             'durability': self.durability,
             'max_durability': self.max_durability,
-            **{k: v for k, v in self.__dict__.items() 
-               if k not in ['item_id', 'name', 'description', 'item_type', 'rarity', 'combinable', 'quantity', 'durability', 'max_durability']}
+            **{key: value for key, value in self.__dict__.items() 
+               if key not in ['item_id', 'name', 'description', 'item_type', 'rarity', 'combinable', 'quantity', 'durability', 'max_durability']}
         }
 
     @classmethod

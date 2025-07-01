@@ -3,11 +3,8 @@ import random
 import json
 import os
 from typing import Dict, List, Optional, Any
-from item import Item
-from enemy import Enemy
-from player import Player
-from room import Room
-from game_world import GameWorld
+from ..core import Item, Enemy, Player, Room
+from ..world import GameWorld
 
 class GameEngine:
     """Main game engine that handles game logic"""

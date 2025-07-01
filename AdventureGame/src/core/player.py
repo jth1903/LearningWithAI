@@ -1,5 +1,5 @@
 from typing import Dict, Any, Optional
-from item import Item
+from .item import Item
 
 class Player:
     """Represents the player character"""

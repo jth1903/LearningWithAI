@@ -1,5 +1,5 @@
 from typing import Dict, List, Optional
-from enemy import Enemy
+from .enemy import Enemy
 
 class Room:
     """Represents a room in the game world"""

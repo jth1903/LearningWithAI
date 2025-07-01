@@ -1,7 +1,5 @@
 from typing import Dict, Optional
-from item import Item
-from enemy import Enemy
-from room import Room
+from ..core import Item, Enemy, Room
 
 class GameWorld:
     """Manages the game world and data"""
