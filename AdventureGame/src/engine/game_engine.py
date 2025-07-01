@@ -84,7 +84,7 @@ class GameEngine:
             
         if direction in room.exits:
             self.current_room_id = room.exits[direction]
-            self.print_slow(f"You move {direction}...")
+            self.print_slow(f"You move {direction} into the {room.name}...")
             return True
         else:
             self.print_slow(f"You can't go {direction} from here.")
@@ -345,6 +345,35 @@ class GameEngine:
         self.print_slow("Use 'buy [item_name]' to purchase an item.")
         return True
     
+    def process_sell(self, item_name: str) -> bool:
+        """Process sell command"""
+        if not self.player:
+            return False
+        
+        # Find item in inventory
+        item_id = None
+        if self.player and self.player.inventory:
+            for inv_item_id, item in self.player.inventory.items():
+                if item.name.lower() == item_name.lower():
+                    item_id = inv_item_id
+                    break
+        
+        if not item_id:
+            self.print_slow("You don't have that item.")
+            return False
+        
+        if not self.player or not self.player.inventory:
+            self.print_slow("You don't have that item.")
+            return False
+        
+        # Sell item to shop
+        item = self.player.inventory[item_id]
+        self.print_slow(f"You sell the {item.name} for {item.value} coins!")
+        self.player.coins += item.value
+        self.player.remove_item(item_id, 1)
+        
+        return True
+
     def process_buy(self, item_name: str) -> bool:
         """Process buy command"""
         room = self.world.get_room(self.current_room_id)
@@ -547,6 +576,14 @@ class GameEngine:
             self.print_slow("Usage: combine [item1] with [item2]")
             return True
         
+        # Save command
+        elif command == "save":
+            return self.save_game()
+        
+        # Load command
+        elif command == "load":
+            return self.load_game()
+        
         # Attack command
         elif command.startswith("attack "):
             enemy_name = command[7:]
@@ -570,6 +607,11 @@ class GameEngine:
         elif command.startswith("buy "):
             item_name = command[4:]
             return self.process_buy(item_name)
+        
+        # Sell command
+        elif command.startswith("sell "):
+            item_name = command[5:]
+            return self.process_sell(item_name)
         
         # Inventory command
         elif command == "inventory":

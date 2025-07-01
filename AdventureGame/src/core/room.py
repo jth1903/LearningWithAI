@@ -3,10 +3,11 @@ from .enemy import Enemy
 
 class Room:
     """Represents a room in the game world"""
-    def __init__(self, room_id: str, description: str, exits: Dict[str, str], 
+    def __init__(self, room_id: str, name: str, description: str, exits: Dict[str, str], 
                  items: Optional[List[str]] = None, enemies: Optional[Dict[str, Enemy]] = None, 
                  shop_items: Optional[Dict[str, Dict[str, int]]] = None):
         self.room_id = room_id
+        self.name = name
         self.description = description
         self.exits = exits
         self.items = items or []

@@ -116,7 +116,7 @@ class GameWorld:
                 "name": "Staff of the Light Mage",
                 "description": "A staff with a glowing core. It seems to radiate light and energy",
                 "light_radius": 5,
-                "damage": 15,
+                "damage": 50,
                 "durability": 100,
                 "reflective_quality": 100,
                 "type": "weapon",
@@ -179,52 +179,62 @@ class GameWorld:
         """Create the game rooms"""
         rooms_data = {
             "entrance": {
+                "name": "Entrance",
                 "description": "You stand at the entrance of a mysterious cave. The air is cool and damp. You can see two paths ahead.",
                 "exits": {"north": "main_cavern", "east": "treasure_room"},
                 "items": ["torch"]
             },
             "main_cavern": {
+                "name": "Main Cavern",
                 "description": "You're in a large cavern with stalactites hanging from the ceiling. Water drips somewhere in the darkness.",
                 "exits": {"south": "entrance", "west": "dark_tunnel"},
                 "items": ["gold_coin"]
             },
-            "treasure_room": {
+            "treasure_room": { 
+                "name": "Treasure Room",
                 "description": "A small chamber with ancient markings on the walls. There's a chest in the corner!",
                 "exits": {"west": "entrance"},
                 "items": ["ancient_key", "gemstone"]
             },
             "ancient_door": {
+                "name": "Ancient Door",
                 "description": "As you enter the doorway, you hear a faint growl.",
                 "exits": {},
                 "enemies": {"orc": Enemy("orc", 100, 10, "A large orc with a large axe")},
                 "items": ["torch"]
             },
             "dark_tunnel": {
+                "name": "Dark Tunnel",
                 "description": "A narrow, dark tunnel. You can barely see your hand in front of your face.",
                 "exits": {"east": "main_cavern", "west": "cave_clearing"},
                 "items": ["mysterious_artifact"]
             },
             "cave_clearing": {
+                "name": "Cave Clearing",
                 "description": "A large opening in the cave there are random things strewn all over. You see a glowing staff on the ground with the words 'staff_of_light' engraved on the hilt",
                 "exits": {"east": "dark_tunnel"},
                 "items": ["staff_of_light"]
             },
             "field": {
+                "name": "Field",
                 "description": "You are in a field.",
                 "exits": {"south": "ancient_door", "north": "village_entrance"},
                 "items": []
             },
             "village_entrance": {
+                "name": "Village Entrance",
                 "description": "You are standing in front of a large archway that seems to have a trail leading into a village.",
                 "exits": {"south": "field", "north": "village_courtyard"},
                 "items": []
             },
             "village_courtyard": {
+                "name": "Village Courtyard",
                 "description": "You are standing in a large courtyard with a three-tier fountain in the middle with shops to the east and west.",
                 "exits": {"east": "general_goods", "west": "weapons_shop", "south": "village_entrance"},
                 "items": []
             },
             "weapons_shop": {
+                "name": "Weapons Shop",
                 "description": "You walk into a well furnished shop with several weapons on display. The shopkeeper is excited to meet a new customer.",
                 "exits": {"east": "village_courtyard"},
                 "shop_items": {
@@ -234,6 +244,7 @@ class GameWorld:
                 }
             },
             "general_goods": {
+                "name": "General Goods",
                 "description": "You are in a general goods shop. The shopkeeper is excited to meet a new customer.",
                 "exits": {"west": "village_courtyard"},
                 "shop_items": {
