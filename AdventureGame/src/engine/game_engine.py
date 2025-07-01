@@ -1,9 +1,7 @@
 import time
-import random
 import json
 import os
-from typing import Dict, List, Optional, Any
-from ..core import Item, Enemy, Player, Room
+from ..core import Player
 from ..world import GameWorld
 
 class GameEngine:
@@ -167,11 +165,11 @@ class GameEngine:
             if legendary_sword:
                 self.player.add_item(legendary_sword)
         elif item_id == "staff_of_the_light_mage" and self.current_room_id == "treasure_room":
-            self.print_slow("You raise the Staff of the Light Mage. A beam of light shoots from its tip, illuminating a hidden panel in the wall.")
-            self.print_slow("With a rumble, the panel slides open, revealing a hidden passage leading deeper into the unknown...")
+            self.print_slow("You raise the Staff of the Light Mage. \n A beam of light shoots from its tip, illuminating a hidden panel in the wall.")
+            self.print_slow("With a rumble, the panel slides open, \n revealing a hidden passage leading deeper into the unknown...")
             treasure_room = self.world.get_room("treasure_room")
             if treasure_room:
-                treasure_room.exits["ancient_door"] = "ancient_door"
+                treasure_room.exits["ancient_door"] = "ancient door"
         else:
             self.print_slow("Nothing special happens.")
         
