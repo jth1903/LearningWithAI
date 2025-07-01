@@ -21,10 +21,14 @@ AdventureGame/
 │   │   └── game_world.py  # Game world data and setup
 │   └── utils/             # Utilities and debug tools
 │       ├── __init__.py    # Package initialization
-│       └── debug_room.py  # Debug utilities
+│       └── file_io.py     # Save/load utilities
 ├── main.py                # Entry point
-├── requirements.txt       # Dependencies (if any)
-└── README.md             # This file
+├── requirements.txt       # Dependencies
+├── save_game.json         # Example save file
+├── data/                  # Static game data (optional)
+├── tests/                 # Automated tests
+│   └── test_room_visited.py
+└── README.md              # This file
 ```
 
 ## 🎮 How to Play
@@ -106,4 +110,27 @@ AdventureGame/
 - Equipment system
 - Save/load functionality
 - Shop system for buying items
-- Experience and leveling system 
+- Experience and leveling system
+
+## 🧰 Utilities
+
+- **src/utils/file_io.py**: Functions for saving and loading game state as JSON.
+
+## 🧪 Testing
+
+- All tests are located in the `tests/` directory.
+- Run tests with:
+  ```bash
+  pytest
+  ```
+
+## 🧹 Code Formatting & Linting
+
+- Format code with [black](https://black.readthedocs.io/en/stable/):
+  ```bash
+  black src/ tests/
+  ```
+- (Optional) Use [flake8](https://flake8.pycqa.org/) for linting:
+  ```bash
+  flake8 src/ tests/
+  ``` 

@@ -1,6 +1,8 @@
 import time
 import json
 import os
+
+from src.core.room import Room
 from ..core import Player
 from ..world import GameWorld
 
@@ -84,7 +86,12 @@ class GameEngine:
             
         if direction in room.exits:
             self.current_room_id = room.exits[direction]
-            self.print_slow(f"You move {direction} into the {room.name}...")
+            room = self.world.get_room(self.current_room_id)
+            if room:
+                room.visit_room()
+                self.print_slow(f"You move {direction} into the {room.name}...")
+            else:
+                self.print_slow("Error: Destination room not found.")
             return True
         else:
             self.print_slow(f"You can't go {direction} from here.")
@@ -439,7 +446,7 @@ class GameEngine:
         
         self.print_slow("Your inventory:")
         if self.player.inventory:
-            for item_id, item in self.player.inventory.items():
+            for item1_id, item in self.player.inventory.items():
                 if item.quantity > 1:
                     self.print_slow(f"  {item.name} (x{item.quantity})")
                 else:
@@ -505,7 +512,7 @@ class GameEngine:
                 'player': self.player.to_dict(),
                 'current_room': self.current_room_id,
                 'game_over': self.game_over,
-                'current_room_items': room.items if room is not None else [],
+                'rooms_state': {room_id: room.items for room_id, room in self.world.rooms.items()},
             }
 
             with open(self.save_file, 'w') as f:
@@ -533,6 +540,11 @@ class GameEngine:
             self.player = Player.from_dict(save_data['player'], self.world.items_database)
             self.current_room_id = save_data['current_room']
             self.game_over = save_data['game_over']
+            # Restore all rooms' items
+            rooms_state = save_data.get('rooms_state', {})
+            for room_id, items in rooms_state.items():
+                if room_id in self.world.rooms:
+                    self.world.rooms[room_id].items = items
             
             self.print_slow("Game loaded successfully!")
             return True

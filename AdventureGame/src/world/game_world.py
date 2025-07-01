@@ -90,7 +90,7 @@ class GameWorld:
             },
             "luminary": {
                 "name": "Luminary",
-                "description": "A glowing abnormality that seems to emit a soft, warm light, it seems to be a glowing orb that shifts between solid and transparent",
+                "description": "A glowing abnormality that seems to emit a soft, warm light, it looks like a glowing orb that shifts between solid and transparent",
                 "type": "item",
                 "rarity": "rare",
                 "light_radius": 5,
@@ -121,7 +121,7 @@ class GameWorld:
                 "reflective_quality": 100,
                 "type": "weapon",
                 "rarity": "legendary",
-                "value": 1000,
+                "value": 100,
                 "combinable": False
             },
             "iron_sword": {
@@ -162,8 +162,43 @@ class GameWorld:
                 "value": 10,
                 "healing": 30,
                 "combinable": False
+            },
+            "torn_page_1": {
+                "name": "Tattered Page",
+                "description": "It reads: 'A coin and a gemstone, together, may reveal something magical...'",
+                "type": "item",
+                "rarity": "common",
+                "combinable": True
+            },
+            "torn_page_2": {
+                "name": "Tattered Page",
+                "description": "It reads: 'The enchanted coin and a mysterious artifact shine with a new light.'",
+                "type": "item",
+                "rarity": "common",
+                "combinable": True
+            },
+            "torn_page_3": {
+                "name": "Tattered Page",
+                "description": "It reads: 'The luminary is but a piece of the key.'",
+                "type": "item",
+                "rarity": "common",
+                "combinable": True
+            },
+            "torn_page_4": {
+                "name": "Tatered Page",
+                "description": "It reads: 'A key in the darkness that reflects, seems to need aditional light.",
+                "type": "item",
+                "rarity": "common",
+                "combinable": True
+            },
+            "torn_page_5": {
+                "name": "Tattered Page",
+                "description": "It reads: 'An ancient staff..., seems dim, perhaps the glow will help",
+                "type": "item",
+                "rarity": "common",
+                "combinable": True
             }
-        }
+        }   
         
         items = {}
         for item_id, data in items_data.items():
@@ -182,56 +217,66 @@ class GameWorld:
                 "name": "Entrance",
                 "description": "You stand at the entrance of a mysterious cave. The air is cool and damp. You can see two paths ahead.",
                 "exits": {"north": "main_cavern", "east": "treasure_room"},
-                "items": ["torch"]
+                "items": ["torch", "torn_page_1"],
+                "visited": False
             },
             "main_cavern": {
                 "name": "Main Cavern",
                 "description": "You're in a large cavern with stalactites hanging from the ceiling. Water drips somewhere in the darkness.",
                 "exits": {"south": "entrance", "west": "dark_tunnel"},
-                "items": ["gold_coin"]
+                "items": ["gold_coin", "torn_page_2"],
+                "visited": False
             },
             "treasure_room": { 
                 "name": "Treasure Room",
                 "description": "A small chamber with ancient markings on the walls. There's a chest in the corner!",
                 "exits": {"west": "entrance"},
-                "items": ["ancient_key", "gemstone"]
+                "items": ["ancient_key", "gemstone", "torn_page_3"],
+                "visited": False
             },
+            # Change this name to something more fitting for the room. this is not a door it is a room after the door
             "ancient_door": {
                 "name": "Ancient Door",
                 "description": "As you enter the doorway, you hear a faint growl.",
                 "exits": {},
                 "enemies": {"orc": Enemy("orc", 100, 10, "A large orc with a large axe")},
-                "items": ["torch"]
+                "items": ["torch"],
+                "visited": False
             },
             "dark_tunnel": {
                 "name": "Dark Tunnel",
                 "description": "A narrow, dark tunnel. You can barely see your hand in front of your face.",
                 "exits": {"east": "main_cavern", "west": "cave_clearing"},
-                "items": ["mysterious_artifact"]
+                "items": ["mysterious_artifact", "torn_page_4"],
+                "visited": False
             },
             "cave_clearing": {
                 "name": "Cave Clearing",
                 "description": "A large opening in the cave there are random things strewn all over. You see a glowing staff on the ground with the words 'staff_of_light' engraved on the hilt",
                 "exits": {"east": "dark_tunnel"},
-                "items": ["staff_of_light"]
+                "items": ["staff_of_light", "torn_page_5"],
+                "visited": False
             },
             "field": {
                 "name": "Field",
                 "description": "You are in a field.",
                 "exits": {"south": "ancient_door", "north": "village_entrance"},
-                "items": []
+                "items": [],
+                "visited": False
             },
             "village_entrance": {
                 "name": "Village Entrance",
                 "description": "You are standing in front of a large archway that seems to have a trail leading into a village.",
                 "exits": {"south": "field", "north": "village_courtyard"},
-                "items": []
+                "items": [],
+                "visited": False
             },
             "village_courtyard": {
                 "name": "Village Courtyard",
                 "description": "You are standing in a large courtyard with a three-tier fountain in the middle with shops to the east and west.",
                 "exits": {"east": "general_goods", "west": "weapons_shop", "south": "village_entrance"},
-                "items": []
+                "items": [],
+                "visited": False
             },
             "weapons_shop": {
                 "name": "Weapons Shop",
@@ -241,7 +286,8 @@ class GameWorld:
                     "iron_sword": {"price": 50, "quantity": 3},
                     "steel_axe": {"price": 75, "quantity": 2},
                     "magic_dagger": {"price": 120, "quantity": 1}
-                }
+                },
+                "visited": False
             },
             "general_goods": {
                 "name": "General Goods",
@@ -250,7 +296,8 @@ class GameWorld:
                 "shop_items": {
                     "torch": {"price": 5, "quantity": 3},
                     "health_potion": {"price": 10, "quantity": 5}
-                }
+                },
+                "visited": False
             }
         }
         

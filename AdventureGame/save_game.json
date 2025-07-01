@@ -1,0 +1,59 @@
+{
+  "player": {
+    "name": "Jeff",
+    "max_health": 100,
+    "health": 100,
+    "coins": 0,
+    "experience": 0,
+    "level": 1,
+    "equipped_weapon": null,
+    "equipped_armor": null,
+    "inventory": {
+      "gemstone": {
+        "item_id": "gemstone",
+        "name": "Gemstone",
+        "description": "A beautiful but unassuming clear gem",
+        "item_type": "item",
+        "rarity": "rare",
+        "combinable": true,
+        "quantity": 1,
+        "durability": 100,
+        "max_durability": 100,
+        "damage": 0,
+        "value": 25,
+        "healing": 0,
+        "reflective_quality": 50
+      }
+    }
+  },
+  "current_room": "treasure_room",
+  "game_over": false,
+  "current_room_items": [
+    "ancient_key"
+  ],
+  "rooms_state": {
+    "entrance": [
+      "torch"
+    ],
+    "main_cavern": [
+      "gold_coin"
+    ],
+    "treasure_room": [
+      "ancient_key"
+    ],
+    "ancient_door": [
+      "torch"
+    ],
+    "dark_tunnel": [
+      "mysterious_artifact"
+    ],
+    "cave_clearing": [
+      "staff_of_light"
+    ],
+    "field": [],
+    "village_entrance": [],
+    "village_courtyard": [],
+    "weapons_shop": [],
+    "general_goods": []
+  }
+}

@@ -5,7 +5,7 @@ class Room:
     """Represents a room in the game world"""
     def __init__(self, room_id: str, name: str, description: str, exits: Dict[str, str], 
                  items: Optional[List[str]] = None, enemies: Optional[Dict[str, Enemy]] = None, 
-                 shop_items: Optional[Dict[str, Dict[str, int]]] = None):
+                 shop_items: Optional[Dict[str, Dict[str, int]]] = None, visited: bool = False):
         self.room_id = room_id
         self.name = name
         self.description = description
@@ -13,7 +13,10 @@ class Room:
         self.items = items or []
         self.enemies = enemies or {}
         self.shop_items = shop_items or {}
-        self.visited = False
+        self.visited = visited    
+    
+    def visit_room(self):
+        self.visited = True
 
     def add_item(self, item_id: str) -> None:
         if item_id not in self.items:
@@ -25,7 +28,7 @@ class Room:
             return True
         return False
 
-    def get_items(self) -> Optional[List[str]]:
+    def get_items(self) -> List[str]:
         return self.items
 
     def add_enemy(self, enemy: Enemy) -> None:
