@@ -25,6 +25,9 @@ class Room:
             return True
         return False
 
+    def get_items(self) -> Optional[List[str]]:
+        return self.items
+
     def add_enemy(self, enemy: Enemy) -> None:
         self.enemies[enemy.name] = enemy
 

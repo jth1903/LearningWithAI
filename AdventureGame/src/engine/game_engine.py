@@ -500,12 +500,14 @@ class GameEngine:
                 self.print_slow("Player not found.")
                 return False
             
+            room = self.world.get_room(self.current_room_id) if self.world else None
             save_data = {
                 'player': self.player.to_dict(),
                 'current_room': self.current_room_id,
-                'game_over': self.game_over
+                'game_over': self.game_over,
+                'current_room_items': room.items if room is not None else [],
             }
-            
+
             with open(self.save_file, 'w') as f:
                 json.dump(save_data, f, indent=2)
             
