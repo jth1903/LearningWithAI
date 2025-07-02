@@ -36,12 +36,12 @@ class GameEngine:
     def show_room(self) -> None:
         """Display current room information"""
         room = self.world.get_room(self.current_room_id)
-        print(room.visited(room))
         if not room:
             return
         
         print("\n" + "="*50)
         self.print_slow(room.description)
+        self.print_slow((str)(room.visited))
         
         # Show player status
         if self.player:
