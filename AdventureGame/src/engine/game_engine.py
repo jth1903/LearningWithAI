@@ -2,6 +2,7 @@ import time
 import json
 import os
 
+from src.core import room
 from src.core.room import Room
 from ..core import Player
 from ..world import GameWorld
@@ -35,6 +36,7 @@ class GameEngine:
     def show_room(self) -> None:
         """Display current room information"""
         room = self.world.get_room(self.current_room_id)
+        print(room.visited(room))
         if not room:
             return
         
@@ -88,8 +90,8 @@ class GameEngine:
             self.current_room_id = room.exits[direction]
             room = self.world.get_room(self.current_room_id)
             if room:
-                room.visit_room()
                 self.print_slow(f"You move {direction} into the {room.name}...")
+                self.process_visit(room)
             else:
                 self.print_slow("Error: Destination room not found.")
             return True
@@ -97,6 +99,9 @@ class GameEngine:
             self.print_slow(f"You can't go {direction} from here.")
             return False
     
+    def process_visit(self, room : Room):
+        return room.visit_room()
+
     def process_take(self, item_name: str) -> bool:
         """Process take item command"""
         room = self.world.get_room(self.current_room_id)
