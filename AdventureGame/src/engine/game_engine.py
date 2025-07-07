@@ -2,7 +2,6 @@ import time
 import json
 import os
 
-from src.core import room
 from src.core.room import Room
 from ..core import Player
 from ..world import GameWorld
