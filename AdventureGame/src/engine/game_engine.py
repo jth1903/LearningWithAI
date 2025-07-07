@@ -41,7 +41,6 @@ class GameEngine:
         
         print("\n" + "="*50)
         self.print_slow(room.description)
-        self.print_slow((str)(room.visited))
         
         # Show player status
         if self.player:
@@ -75,7 +74,7 @@ class GameEngine:
     
     def get_command(self) -> str:
         """Get and process player command"""
-        self.print_slow("\nWhat would you like to do?")
+        self.print_slow("\nWhat would you like to do? If you need help, type 'help' for a list of commands.")
         command = input("> ").lower().strip()
         return command
     
@@ -181,7 +180,7 @@ class GameEngine:
             self.print_slow("With a rumble, the panel slides open, \n revealing a hidden passage leading deeper into the unknown...")
             treasure_room = self.world.get_room("treasure_room")
             if treasure_room:
-                treasure_room.exits["ancient_door"] = "ancient door"
+                treasure_room.exits["ancient_door"] = "ancient_door"
         else:
             self.print_slow("Nothing special happens.")
         

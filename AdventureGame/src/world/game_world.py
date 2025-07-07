@@ -164,35 +164,35 @@ class GameWorld:
                 "combinable": False
             },
             "torn_page_1": {
-                "name": "Tattered Page",
+                "name": "Tattered Page 1",
                 "description": "It reads: 'A coin and a gemstone, together, may reveal something magical...'",
                 "type": "item",
                 "rarity": "common",
                 "combinable": True
             },
             "torn_page_2": {
-                "name": "Tattered Page",
+                "name": "Tattered Page 2",
                 "description": "It reads: 'The enchanted coin and a mysterious artifact shine with a new light.'",
                 "type": "item",
                 "rarity": "common",
                 "combinable": True
             },
             "torn_page_3": {
-                "name": "Tattered Page",
+                "name": "Tattered Page 3",
                 "description": "It reads: 'The luminary is but a piece of the key.'",
                 "type": "item",
                 "rarity": "common",
                 "combinable": True
             },
             "torn_page_4": {
-                "name": "Tatered Page",
+                "name": "Tattered Page 4",
                 "description": "It reads: 'A key in the darkness that reflects, seems to need aditional light.",
                 "type": "item",
                 "rarity": "common",
                 "combinable": True
             },
             "torn_page_5": {
-                "name": "Tattered Page",
+                "name": "Tattered Page 5",
                 "description": "It reads: 'An ancient staff..., seems dim, perhaps the glow will help",
                 "type": "item",
                 "rarity": "common",
